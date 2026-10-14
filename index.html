@@ -1,0 +1,3304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIẢI MÃ MẬT MÃ - Thông điệp chữ</title>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<style>
+:root{
+  --blue:#176fba;
+  --reveal:#b3132b;
+  --reveal-text:#ffffff;
+  --slot-color:#b8112b;
+  --title-accent:#b2172f;
+  --blue-dark:#0f5d9d;
+  --blue-soft:#e9f4fc;
+  --pink:#ef2b67;
+  --yellow:#ffe33f;
+  --red:#b8122b;
+  --red-soft:#ffe6eb;
+  --green:#0a8c56;
+  --green-soft:#e8f8f0;
+  --ink:#111;
+  --muted:#68737f;
+  --line:#cbd4dd;
+}
+*{box-sizing:border-box}
+html,body{
+  width:100%;height:100%;margin:0;background:#fff;
+  font-family:"Times New Roman",Times,serif;
+}
+body{overflow:hidden}
+button,input,select{font-family:"Times New Roman",Times,serif}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+.app{
+  width:100vw;height:100vh;padding:8px;background:#fff;overflow:hidden;
+}
+.sheet{
+  width:min(1500px,calc(100vw - 16px));
+  height:calc(100vh - 16px);
+  margin:0 auto;
+  border:3px solid var(--blue);
+  border-radius:20px;
+  background:#fff;
+  padding:10px 14px 12px;
+  display:grid;
+  grid-template-rows:72px 94px 1fr 104px;
+  gap:8px;
+  overflow:hidden;
+}
+
+/* ===== HEADER ===== */
+.header{
+  display:grid;
+  grid-template-columns:205px 1fr 315px;
+  align-items:center;
+  gap:12px;
+}
+.ribbon{
+  position:relative;width:185px;height:44px;margin-left:-14px;
+  background:var(--pink);color:#fff;
+  display:flex;align-items:center;padding-left:27px;
+  font-size:20px;font-weight:800;
+}
+.ribbon:after{
+  content:"";position:absolute;top:0;right:-25px;
+  border-top:22px solid var(--pink);
+  border-bottom:22px solid var(--pink);
+  border-right:25px solid transparent;
+}
+.head-center{text-align:center;min-width:0}
+.title{
+  color:#df1724;font-size:37px;line-height:1;font-weight:900;
+  letter-spacing:7px;text-shadow:2px 2px 0 #111;white-space:nowrap;
+}
+.student-row{
+  margin-top:7px;display:flex;justify-content:center;align-items:center;
+  gap:16px;flex-wrap:wrap;font-size:15px;font-weight:700;
+}
+.student-row label{display:flex;align-items:center;gap:6px}
+.student-row input{
+  border:0;border-bottom:1.6px solid #333;outline:0;background:#fff;
+  height:28px;padding:2px 4px;font-size:15px;
+}
+#studentName{width:205px}
+#studentClass{width:82px}
+.head-right{
+  display:flex;justify-content:flex-end;align-items:center;gap:10px;
+}
+.emojis{font-size:26px;letter-spacing:5px;white-space:nowrap}
+.admin-btn{
+  border:0;border-radius:999px;padding:8px 13px;background:#174f7e;color:#fff;
+  font-size:14px;font-weight:800;
+}
+
+
+/* ===== SCORE ===== */
+.question-board-top{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:10px;
+  margin-bottom:5px;
+}
+.question-board-top h2{
+  grid-column:2;
+  margin:0;
+}
+.score-pill{
+  grid-column:3;
+  justify-self:end;
+  min-width:128px;
+  border:1.5px solid #b8c8d7;
+  border-radius:999px;
+  padding:6px 11px;
+  background:#f7fbff;
+  color:#154f7e;
+  font-size:13px;
+  font-weight:900;
+  text-align:center;
+  white-space:nowrap;
+}
+.number-btn{
+  position:relative;
+  flex-direction:column;
+  line-height:1;
+}
+.number-btn .n-main{
+  font-size:19px;
+  font-weight:900;
+}
+.number-btn .n-point{
+  margin-top:2px;
+  font-size:9px;
+  font-weight:700;
+  color:#718093;
+}
+.number-btn.done .n-point{
+  color:#087445;
+}
+.score-editor-box,
+.score-history-box{
+  border:1.5px dashed #98adbf;
+  border-radius:12px;
+  padding:12px;
+  background:#f8fbfd;
+}
+.score-editor-head,
+.score-history-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.score-editor-head strong,
+.score-history-head strong{
+  color:#24435e;
+}
+.score-tools{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.score-tools input{
+  width:82px!important;
+  height:34px!important;
+}
+.point-editor{
+  margin-top:9px;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+  max-height:190px;
+  overflow-y:auto;
+  padding-right:3px;
+}
+.point-item{
+  border:1px solid #d5dee7;
+  border-radius:9px;
+  padding:7px;
+  background:#fff;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:7px;
+  align-items:center;
+}
+.point-item label{
+  font-size:12px;
+  white-space:nowrap;
+}
+.point-item input{
+  min-width:0;
+  height:32px!important;
+  padding:4px 6px!important;
+  text-align:center;
+}
+.score-total-preview{
+  margin-top:7px;
+  color:#536273;
+  font-size:12px;
+  font-weight:800;
+  text-align:right;
+}
+.score-history-actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+.score-history-preview{
+  margin-top:9px;
+  max-height:165px;
+  overflow:auto;
+  border:1px solid #d5dde5;
+  border-radius:8px;
+  background:#fff;
+  padding:7px;
+  font-size:12px;
+}
+.score-history-preview table{
+  width:100%;
+  border-collapse:collapse;
+}
+.score-history-preview th,
+.score-history-preview td{
+  border-bottom:1px solid #e2e7ec;
+  padding:5px 6px;
+  text-align:left;
+  white-space:nowrap;
+}
+.score-history-preview th{
+  color:#24435e;
+  background:#f4f8fb;
+  position:sticky;
+  top:0;
+}
+.score-note{
+  margin-top:6px;
+  color:#68737e;
+  font-size:11.5px;
+  line-height:1.4;
+}
+@media(max-width:900px){
+  .point-editor{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* ===== QUESTION NUMBERS ===== */
+.question-board{
+  border:2px solid var(--blue);
+  border-radius:16px;
+  background:#fff;
+  padding:7px 12px 9px;
+  display:grid;
+  grid-template-rows:auto 1fr;
+  overflow:hidden;
+}
+.question-board h2{
+  margin:0 0 5px;text-align:center;color:var(--blue-dark);
+  font-size:17px;font-weight:900;letter-spacing:.5px;
+}
+.number-grid{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  align-content:center;
+}
+.number-btn{
+  width:44px;height:44px;flex:0 0 44px;
+  border:2px solid #b8c7d5;border-radius:10px;background:#fff;
+  color:var(--blue-dark);font-size:20px;font-weight:900;
+  box-shadow:0 2px 5px rgba(15,93,157,.08);
+  transition:.15s ease;
+}
+.number-btn:hover{
+  border-color:var(--blue);
+  transform:translateY(-2px);
+}
+.number-btn.done{
+  background:var(--green-soft);
+  border-color:#58ba88;color:#087445;
+}
+.number-btn.active{
+  outline:3px solid rgba(255,201,0,.43);
+  outline-offset:2px;
+}
+
+/* ===== BIG LETTER AREA ===== */
+.letters-section{
+  min-height:0;border:2px solid var(--blue);border-radius:17px;
+  background:#fff;padding:8px;
+  display:grid;grid-template-rows:auto 1fr;overflow:hidden;
+}
+.letters-head{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:0 4px 6px;
+}
+.letters-head h2{
+  margin:0;color:#1b4d78;font-size:19px;font-weight:900;
+}
+.main-message-label{
+  color:#707984;font-size:12px;font-weight:700;text-align:center;
+}
+.main-message-label strong{color:var(--title-accent);font-size:14px}
+.progress-wrap{
+  display:flex;align-items:center;gap:8px;color:#596571;font-size:12px;font-weight:800;
+}
+.progress{
+  width:150px;height:9px;border-radius:999px;background:#e4eaf0;overflow:hidden;
+}
+.progress > div{
+  width:0;height:100%;background:var(--green);transition:width .25s ease;
+}
+.grid-frame{
+  min-height:0;border:1px solid #656d74;background:#666;overflow:hidden;
+}
+.message-grid{
+  width:100%;height:100%;display:grid;gap:1px;background:#707070;
+}
+.cell{
+  min-width:0;min-height:0;background:#fff;color:#111;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Consolas,"Courier New",monospace;font-weight:900;line-height:1;
+  user-select:none;
+  transition:background .17s,color .17s,transform .17s;
+}
+.cell.on{
+  background:var(--reveal);
+  color:var(--reveal-text);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.22);
+}
+.cell.flash{transform:scale(.88)}
+
+/* ===== BOTTOM MESSAGE ===== */
+.message-box{
+  border:2px dashed #db3345;border-radius:17px;background:#fff;
+  padding:8px 14px 9px;
+  display:grid;grid-template-columns:55px 1fr 180px;align-items:center;
+  overflow:hidden;
+}
+.lock{font-size:32px;text-align:center}
+.message-center{text-align:center;min-width:0}
+.message-title{font-size:16px;font-weight:900;line-height:1.15}
+.message-title strong{color:#bd1730}
+.slots{
+  margin-top:7px;display:flex;justify-content:center;align-items:center;
+  gap:5px;flex-wrap:wrap;
+}
+.slot{
+  min-width:37px;height:37px;padding:0 5px;
+  border:2px dashed #d42c40;border-radius:8px;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--slot-color);font-size:19px;font-weight:900;
+}
+.slot.space{min-width:12px;border:0;background:transparent}
+.status{
+  min-height:18px;margin-top:4px;color:#6a737c;font-size:12px;font-weight:700;
+}
+.status.good{color:#087547}
+.status.bad{color:#b31d34}
+.bottom-actions{
+  display:flex;flex-direction:column;gap:6px;align-items:stretch;
+}
+.bottom-actions button{
+  border:0;border-radius:8px;padding:7px 8px;color:#fff;font-size:12px;font-weight:800;
+}
+.retry{background:#df7724}
+.reset{background:#cf2a48}
+
+/* ===== QUESTION MODAL ===== */
+.overlay{
+  position:fixed;inset:0;z-index:100;background:rgba(10,20,32,.60);
+  display:flex;align-items:center;justify-content:center;padding:18px;
+}
+.question-modal{
+  width:min(820px,100%);background:#fff;border:2px solid var(--blue);
+  border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.32);
+}
+.q-top{
+  background:linear-gradient(135deg,#0f5d9d,#173f5f);color:#fff;
+  padding:16px 18px;display:flex;justify-content:space-between;gap:15px;
+}
+.q-label{font-size:12px;font-weight:900;letter-spacing:1.4px;opacity:.9}
+.q-title{
+  margin:5px 0 0;
+  font-size:22px;
+  line-height:1.45;
+  font-weight:800;
+  font-family:"Times New Roman","Cambria Math",serif;
+  white-space:pre-wrap;
+}
+.close{
+  width:39px;height:39px;border:1px solid rgba(255,255,255,.28);
+  border-radius:9px;background:rgba(255,255,255,.08);color:#fff;
+  font-size:19px;font-weight:900;
+}
+.q-body{padding:17px 18px 16px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.option-btn{
+  min-height:57px;
+  border:1.4px solid #c8d2dc;
+  border-radius:11px;
+  background:#fff;
+  padding:10px 12px;
+  text-align:left;
+  color:#111;
+  font-size:16px;
+  line-height:1.38;
+  font-family:"Times New Roman","Cambria Math",serif;
+  white-space:pre-wrap;
+}
+.option-btn:hover:not(:disabled){border-color:var(--blue);background:#f7fbff}
+.option-btn .code{
+  display:inline-flex;min-width:33px;height:28px;padding:0 6px;margin-right:7px;
+  border-radius:7px;align-items:center;justify-content:center;
+  background:#eaf3f9;color:#174f7e;font-weight:900;
+}
+.option-btn.correct{background:#e4f3ff;border-color:#6daee0}
+.option-btn.correct .code{background:var(--yellow);color:#a90a24}
+.option-btn.wrong{background:var(--red-soft);border-color:#df8895}
+.feedback{min-height:22px;margin-top:10px;font-size:13px;font-weight:800}
+.modal-actions{display:flex;justify-content:flex-end;margin-top:10px}
+.next-btn{
+  border:0;border-radius:9px;padding:9px 13px;background:#174f7e;color:#fff;font-weight:800;
+}
+
+
+/* ===== PIN LOGIN ===== */
+.pin-card{
+  width:min(430px,100%);
+  background:#fff;
+  border:2px solid var(--blue);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 24px 80px rgba(0,0,0,.30);
+}
+.pin-card h2{
+  margin:0;
+  color:#0e5e9e;
+  font-size:25px;
+}
+.pin-card p{
+  margin:7px 0 14px;
+  color:#66717c;
+  font-size:14px;
+  line-height:1.4;
+}
+.pin-card input{
+  width:100%;
+  height:44px;
+  border:1px solid #bec9d4;
+  border-radius:9px;
+  padding:7px 10px;
+  outline:0;
+  background:#fff;
+  font-size:18px;
+  text-align:center;
+  letter-spacing:4px;
+}
+.pin-card input:focus{
+  border-color:#2384cf;
+  box-shadow:0 0 0 3px rgba(35,132,207,.11);
+}
+.pin-error{
+  min-height:20px;
+  margin-top:7px;
+  color:#b31d34;
+  font-size:13px;
+  font-weight:800;
+  text-align:center;
+}
+.pin-actions{
+  margin-top:12px;
+  display:flex;
+  justify-content:center;
+  gap:9px;
+}
+.pin-actions button{
+  min-width:120px;
+  border-radius:9px;
+  padding:9px 12px;
+  font-size:15px;
+  font-weight:800;
+}
+.pin-cancel{
+  border:1px solid #bdc8d3;
+  background:#fff;
+  color:#24435e;
+}
+.pin-confirm{
+  border:0;
+  background:#0f6eb8;
+  color:#fff;
+}
+
+/* ===== ADMIN ===== */
+.admin{
+  width:min(1000px,100%);max-height:93vh;overflow-y:auto;
+  background:#fff;border:2px solid var(--blue);border-radius:20px;
+  padding:18px 20px 20px;box-shadow:0 24px 80px rgba(0,0,0,.32);
+}
+.admin::-webkit-scrollbar{width:10px}
+.admin::-webkit-scrollbar-thumb{background:#2185d0;border-radius:9px}
+.admin::-webkit-scrollbar-track{background:#eaf5ff}
+.admin-head{
+  display:flex;justify-content:space-between;gap:15px;align-items:flex-start;
+  padding-bottom:10px;border-bottom:1px solid #d7dfe6;
+}
+.admin-head h2{margin:0;color:#0e5e9e;font-size:27px}
+.admin-head p{margin:6px 0 0;color:#66717c;font-size:13px;line-height:1.42}
+.admin-close{
+  width:40px;height:40px;border:1px solid #bdc8d3;border-radius:9px;background:#fff;
+  color:#24435e;font-size:20px;font-weight:900;
+}
+.form{
+  margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:13px;
+}
+.field{display:flex;flex-direction:column;gap:5px}
+.field.full{grid-column:1/-1}
+.field label{font-size:15px;font-weight:800;color:#24384a}
+.field input,.field select{
+  width:100%;height:40px;border:1px solid #bec9d4;border-radius:8px;
+  padding:7px 9px;outline:0;background:#fff;font-size:15px;
+}
+.field input:focus,.field select:focus{
+  border-color:#2384cf;box-shadow:0 0 0 3px rgba(35,132,207,.11);
+}
+.help{font-size:12px;line-height:1.42;color:#68737e}
+.upload-box{
+  border:1.5px dashed #98adbf;border-radius:12px;padding:12px;background:#f8fbfd;
+}
+.upload-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.upload-row input[type=file]{width:min(530px,100%);height:auto;background:#fff}
+.small-btn{
+  border:0;border-radius:8px;padding:8px 12px;background:#1b73b9;color:#fff;font-weight:800;
+}
+.preview{
+  margin-top:8px;min-height:64px;max-height:140px;overflow:auto;
+  border:1px solid #d4dce4;border-radius:8px;background:#fff;
+  padding:8px 10px;font-size:13px;line-height:1.4;
+}
+.notice{
+  padding:10px 11px;border-radius:9px;background:#eef8f4;
+  border:1px solid #addac4;color:#2b6650;font-size:13px;line-height:1.45;
+}
+.notice.warn{
+  background:#fff7df;border-color:#e8d085;color:#6b581b;
+}
+.admin-actions{
+  margin-top:16px;display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;
+}
+.admin-actions button{
+  border-radius:9px;padding:10px 14px;font-size:15px;font-weight:800;
+}
+.cancel{border:1px solid #bdc8d3;background:#fff;color:#24435e}
+.apply{border:0;background:#0f6eb8;color:#fff}
+
+@media(max-width:1100px){
+  .header{grid-template-columns:165px 1fr 245px}
+  .title{font-size:30px;letter-spacing:5px}
+  .ribbon{width:150px;font-size:18px}
+  .emojis{font-size:22px}
+}
+@media(max-height:780px){
+  .sheet{
+    transform:scale(.88);transform-origin:top center;
+    height:calc((100vh - 16px)/.88);
+    width:min(1700px,calc((100vw - 16px)/.88));
+  }
+}
+@media(max-width:760px){
+  .form{grid-template-columns:1fr}.field.full{grid-column:auto}
+  .options{grid-template-columns:1fr}
+  .message-box{grid-template-columns:45px 1fr}
+  .bottom-actions{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <main class="sheet">
+    <header class="header">
+      <div class="ribbon" id="groupRibbon">NHÓM..........</div>
+
+      <div class="head-center">
+        <div class="title">GIẢI MÃ MẬT MÃ</div>
+        <div class="student-row">
+          <label>Họ và tên: <input id="studentName" type="text" autocomplete="off"></label>
+          <label>Lớp: <input id="studentClass" type="text" autocomplete="off"></label>
+        </div>
+      </div>
+
+      <div class="head-right">
+        <div class="emojis">🔒 ✨ 🧪</div>
+        <button class="admin-btn" id="openAdmin" type="button">⚙ Quản trị giáo viên</button>
+      </div>
+    </header>
+
+    <section class="question-board">
+      <div class="question-board-top">
+        <h2>CÂU HỎI</h2>
+        <div class="score-pill">Điểm: <span id="scoreText">0</span> / <span id="maxScoreText">10</span></div>
+      </div>
+      <div class="number-grid" id="numberGrid"></div>
+    </section>
+
+    <section class="letters-section">
+      <div class="letters-head">
+        <h2>CÁC CHỮ CÁI</h2>
+
+        <div class="main-message-label">
+          <strong>🔐 THÔNG ĐIỆP BÍ MẬT</strong>
+        </div>
+
+        <div class="progress-wrap">
+          <span id="progressText">0/10</span>
+          <div class="progress"><div id="progressFill"></div></div>
+        </div>
+      </div>
+
+      <div class="grid-frame">
+        <div class="message-grid" id="messageGrid"></div>
+      </div>
+    </section>
+
+    <section class="message-box">
+      <div class="lock">🔐</div>
+
+      <div class="message-center">
+        <div class="message-title">
+          🔐 THÔNG ĐIỆP BÍ MẬT
+        </div>
+
+        <div class="slots" id="slots"></div>
+
+        <div class="status" id="status">
+          Trả lời đúng từng câu để mở dần mật mã. Không có nội dung bí mật nào được hiển thị trước.
+        </div>
+      </div>
+
+      <div class="bottom-actions">
+        <button class="retry" type="button" onclick="resetWrongAnswers()">Làm lại câu sai</button>
+        <button class="reset" type="button" onclick="resetAll()">Làm lại tất cả</button>
+        <button class="submit-score" type="button" onclick="guiKetQuaLenGoogleSheets()" style="background:#0a8c56; color:#fff; border:0; border-radius:8px; padding:7px 8px; font-weight:800; cursor:pointer;">📤 Nộp kết quả về GV</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- QUESTION MODAL -->
+<div class="overlay hidden" id="questionOverlay">
+  <section class="question-modal">
+    <div class="q-top">
+      <div>
+        <div class="q-label" id="qLabel">CÂU HỎI 01</div>
+        <h2 class="q-title" id="qTitle">Nội dung câu hỏi</h2>
+      </div>
+
+      <button class="close" id="closeQuestion" type="button">✕</button>
+    </div>
+
+    <div class="q-body">
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+
+      <div class="modal-actions">
+        <button class="next-btn hidden" id="manualClose" type="button">
+          Đóng và chọn câu khác
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PIN LOGIN -->
+<div class="overlay hidden" id="pinOverlay">
+  <section class="pin-card" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
+    <h2 id="pinTitle">🔐 QUẢN TRỊ GIÁO VIÊN</h2>
+    <p>Nhập mã PIN để mở phần cài đặt giáo viên. PIN mặc định lần đầu là <strong>12345</strong>.</p>
+
+    <input
+      id="pinLoginInput"
+      type="password"
+      inputmode="numeric"
+      autocomplete="off"
+      maxlength="12"
+      placeholder="Nhập mã PIN"
+      aria-label="Mã PIN quản trị giáo viên"
+    >
+
+    <div class="pin-error" id="pinError"></div>
+
+    <div class="pin-actions">
+      <button type="button" class="pin-cancel" id="pinCancel">Hủy</button>
+      <button type="button" class="pin-confirm" id="pinConfirm">Mở quản trị</button>
+    </div>
+  </section>
+</div>
+
+<!-- ADMIN -->
+<div class="overlay hidden" id="adminOverlay">
+  <section class="admin">
+    <div class="admin-head">
+      <div>
+        <h2>QUẢN TRỊ GIÁO VIÊN</h2>
+        <p>
+          Nhập <b>thông điệp lớn</b> cần tô ở bảng giữa và <b>thông điệp con</b> phía dưới.
+          Nạp câu hỏi Word; hệ thống tự gắn mã đáp án đúng và chia các điểm ảnh của thông điệp lớn cho từng câu.
+          Ở chế độ học sinh, hai thông điệp này luôn được ẩn; chỉ giáo viên nhìn thấy trong cửa sổ quản trị.
+        </p>
+      </div>
+
+      <button class="admin-close" id="closeAdmin" type="button">✕</button>
+    </div>
+
+    <div class="form">
+      <div class="field">
+        <label>Tên nhóm</label>
+        <input id="groupInput" value="NHÓM..........">
+      </div>
+
+      <div class="field">
+        <label>Mã PIN quản trị</label>
+        <input id="teacherPinInput" type="password" value="12345" maxlength="12">
+        <div class="help">Đổi PIN trước khi giao file chơi cho học sinh. PIN mặc định lần đầu: 12345.</div>
+      </div>
+
+      <div class="field">
+        <label>Số câu hiển thị</label>
+        <select id="questionCount">
+          <option>4</option><option>5</option><option>6</option><option>7</option>
+          <option>8</option><option>9</option><option selected>10</option><option>11</option>
+          <option>12</option><option>13</option><option>14</option><option>15</option>
+          <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <div class="score-editor-box">
+          <div class="score-editor-head">
+            <strong>ĐIỂM TỪNG CÂU</strong>
+
+            <div class="score-tools">
+              <span style="font-size:12px;font-weight:700">Gán đều:</span>
+              <input id="equalPointInput" type="number" min="0" max="100" step="0.25" value="1">
+              <button class="small-btn" id="applyEqualPoints" type="button">Áp dụng</button>
+            </div>
+          </div>
+
+          <div class="score-note">
+            Giáo viên có thể đặt điểm riêng cho từng câu. Nếu học sinh chọn sai rồi trả lời lại đúng,
+            câu đó chỉ nhận <strong>50% số điểm tối đa</strong>.
+            <br><strong>Lưu ý:</strong> số ô điểm luôn theo “Số câu hiển thị”; khi áp dụng, ngân hàng câu hỏi phải có đủ số câu đã chọn.
+          </div>
+
+          <div class="point-editor" id="pointEditor"></div>
+          <div class="score-total-preview">Tổng điểm tối đa: <span id="pointTotalPreview">0</span></div>
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>Thông điệp lớn ở khu vực giữa</label>
+        <input id="mainMessageInput" value="CHÚC MỪNG 20 10" maxlength="160">
+        <div class="help">
+          Có thể nhập thông điệp ngắn hoặc dài. Hệ thống tự tính số cột, tự xuống dòng và tự căn giữa.
+          Chữ tiếng Việt có dấu được chuyển sang chữ không dấu khi vẽ pixel, nhưng nội dung gốc vẫn giữ nguyên ở tiêu đề.
+          Có thể dùng ký tự | để chủ động xuống dòng, ví dụ: CHUC MUNG|20/10.
+        </div>
+      </div>
+
+      <div class="field full">
+        <label>Thông điệp con phía dưới</label>
+        <input id="subMessageInput" value="CON YÊU MẸ" maxlength="50">
+        <div class="help">
+          Thông điệp con sẽ hiện dần theo số câu trả lời đúng.
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Độ rộng bảng chữ</label>
+        <select id="gridCols">
+          <option value="auto" selected>Tự động khớp thông điệp</option>
+          <option value="45">45 cột</option>
+          <option value="50">50 cột</option>
+          <option value="55">55 cột</option>
+          <option value="60">60 cột</option>
+          <option value="65">65 cột</option>
+          <option value="75">75 cột</option>
+          <option value="85">85 cột</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Màu nền khi tô thông điệp</label>
+        <select id="revealColor">
+          <option value="#b3132b" selected>Đỏ đậm</option>
+          <option value="#0f4f8a">Xanh dương đậm</option>
+          <option value="#5b2c83">Tím đậm</option>
+          <option value="#087f5b">Xanh lá đậm</option>
+          <option value="#b45309">Cam nâu</option>
+          <option value="#9d174d">Hồng mận</option>
+          <option value="#111827">Đen than</option>
+          <option value="#7c3aed">Tím sáng</option>
+          <option value="#0369a1">Xanh biển</option>
+          <option value="#be123c">Đỏ hồng</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Màu chữ trong ô đã tô</label>
+        <select id="revealTextColor">
+          <option value="#ffffff" selected>Trắng</option>
+          <option value="#fff7ae">Vàng kem</option>
+          <option value="#fde047">Vàng tươi</option>
+          <option value="#111827">Đen</option>
+          <option value="#7f1d1d">Đỏ nâu</option>
+          <option value="#0f172a">Xanh đen</option>
+          <option value="#064e3b">Xanh lá đậm</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Màu chữ thông điệp phía dưới</label>
+        <select id="slotTextColor">
+          <option value="#b8112b" selected>Đỏ đậm</option>
+          <option value="#0f4f8a">Xanh dương đậm</option>
+          <option value="#5b2c83">Tím</option>
+          <option value="#087f5b">Xanh lá</option>
+          <option value="#b45309">Cam nâu</option>
+          <option value="#111827">Đen than</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Màu tiêu đề thông điệp</label>
+        <select id="titleAccentColor">
+          <option value="#b2172f" selected>Đỏ đậm</option>
+          <option value="#0f4f8a">Xanh dương đậm</option>
+          <option value="#5b2c83">Tím</option>
+          <option value="#087f5b">Xanh lá</option>
+          <option value="#b45309">Cam nâu</option>
+          <option value="#111827">Đen than</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label>Tùy chỉnh màu riêng</label>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:13px;font-weight:700">Nền tô:</span>
+          <input id="customRevealColor" type="color" value="#b3132b" style="width:58px;height:36px;padding:2px">
+          <span style="font-size:13px;font-weight:700">Chữ trong ô:</span>
+          <input id="customRevealTextColor" type="color" value="#ffffff" style="width:58px;height:36px;padding:2px">
+          <button type="button" class="small-btn" id="applyCustomColors">Dùng màu tùy chọn</button>
+        </div>
+        <div class="help">
+          Có thể chọn nhanh trong danh sách hoặc dùng bảng màu để tạo phối màu riêng.
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Đảo vị trí phương án</label>
+        <select id="shuffleOptions">
+          <option value="yes">Có</option>
+          <option value="no">Không</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <div class="upload-box">
+          <strong>NẠP CÂU HỎI WORD</strong>
+
+          <div class="upload-row" style="margin-top:8px">
+            <input id="questionFile" type="file" accept=".docx,.txt,.json">
+            <button class="small-btn" id="readQuestions" type="button">Đọc câu hỏi</button>
+          </div>
+
+          <div class="help" style="margin-top:7px">
+            Word: gạch chân phương án đúng hoặc thêm dòng <b>Đáp án: B</b>.
+            TXT dùng cùng cấu trúc. JSON cũng được hỗ trợ.
+            <br><b>Công thức Hóa – Toán:</b> app giữ chỉ số dưới/chỉ số trên của Word
+            (ví dụ H₂SO₄, SO₄²⁻, x²), ký hiệu Unicode và các Equation hiện đại cơ bản.
+            Với Equation Editor rất cũ dạng OLE, app sẽ cố nhận diện mũi tên phản ứng; nên ưu tiên
+            gõ công thức bằng Equation mới hoặc dùng Subscript/Superscript của Word.
+          </div>
+
+          <div class="preview" id="questionPreview">
+            Đang dùng 10 câu hỏi mẫu.
+          </div>
+        </div>
+      </div>
+
+      <div class="field full">
+        <div class="score-history-box">
+          <div class="score-history-head">
+            <strong>BẢNG ĐIỂM NHÓM</strong>
+
+            <div class="score-history-actions">
+              <button class="small-btn" id="saveGroupScore" type="button">💾 Lưu điểm nhóm hiện tại</button>
+              <button class="small-btn" id="exportGroupScores" type="button">📊 Xuất điểm nhóm CSV</button>
+              <button class="small-btn" id="clearGroupScores" type="button" style="background:#b42338">Xóa bảng điểm</button>
+            </div>
+          </div>
+
+          <div class="score-note">
+            File CSV gồm: nhóm, họ tên, lớp, tổng điểm, điểm tối đa, số câu đúng, số lần làm từng câu
+            và điểm nhận được ở từng câu. Có thể mở trực tiếp bằng Excel.
+          </div>
+
+          <div class="score-history-preview" id="scoreHistoryPreview">
+            Chưa lưu kết quả nhóm nào.
+          </div>
+        </div>
+      </div>
+
+      <div class="field full">
+        <div class="notice" id="notice">
+          Cơ chế hiện tại: câu đúng số 1 chỉ tô phần điểm ảnh được giao cho câu 1;
+          câu 2 tô phần của câu 2... Khi hoàn thành, các ô màu đậm ghép đúng thành thông điệp lớn.
+          Ở chế độ “Tự động khớp”, app thử nhiều kích thước lưới để chọn bố cục dễ đọc nhất.
+          Giáo viên có thể phối nhiều màu khác nhau cho nền tô, chữ trong ô, thông điệp con và tiêu đề.
+          File Word xuất cho học sinh luôn ở dạng đen trắng, không tô sẵn và không in tên của bất kỳ thông điệp bí mật nào.
+          Điểm từng câu do giáo viên thiết lập; nếu học sinh đã trả lời sai trước khi trả lời đúng thì câu đó chỉ nhận 50% điểm.
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-actions">
+      <button class="cancel" id="cancelAdmin" type="button">Hủy</button>
+      <button class="cancel" id="exportWord" type="button">📝 Xuất Word cho học sinh</button>
+      <button class="apply" id="applyAdmin" type="button">Áp dụng và tạo phiếu</button>
+    </div>
+  </section>
+</div>
+
+<audio id="soundCorrect" src="dung.mp3" preload="auto"></audio>
+<audio id="soundWrong" src="sai.mp3" preload="auto"></audio>
+
+<script>
+const DEFAULT_QUESTIONS = [
+  {text:"Tên thay thế của CH₃CH₂CH₂COOH là",options:["butanoic acid","propanoic acid","pentanoic acid","ethanoic acid"],correctIndex:0},
+  {text:"Trong phân tử carboxylic acid, nguyên tử hydrogen trong nhóm –OH trở nên linh động vì",options:["liên kết O–H phân cực mạnh","liên kết C–C yếu","phân tử không phân cực","có liên kết ion"],correctIndex:0},
+  {text:"Nguyên nhân chủ yếu làm cho nhiệt độ sôi của carboxylic acid cao là",options:["khối lượng phân tử lớn","có liên kết hydrogen dạng dimer giữa các phân tử","có liên kết ion","có liên kết kim loại"],correctIndex:1},
+  {text:"Trong các chất sau, chất có nhiệt độ sôi cao nhất là",options:["C₂H₆","CH₃CHO","C₂H₅OH","CH₃COOH"],correctIndex:3},
+  {text:"Formic acid, acetic acid và propionic acid tan tốt trong nước do",options:["tạo muối với nước","tạo liên kết hydrogen với nước","phản ứng với nước","có liên kết ion"],correctIndex:1},
+  {text:"Dung dịch carboxylic acid làm quỳ tím",options:["chuyển sang màu xanh","chuyển sang màu đỏ","không đổi màu","chuyển sang màu vàng"],correctIndex:1},
+  {text:"Nhóm chức đặc trưng của carboxylic acid là",options:["–COOH","–OH","–CHO","–COO–"],correctIndex:0},
+  {text:"Acetic acid có công thức nào sau đây?",options:["CH₃COOH","HCOOH","C₂H₅OH","CH₃CHO"],correctIndex:0},
+  {text:"Carboxylic acid phản ứng với base tạo thành",options:["muối và nước","alcohol","aldehyde","ketone"],correctIndex:0},
+  {text:"Chất nào sau đây là carboxylic acid?",options:["CH₃COOH","C₂H₅OH","CH₃CHO","CH₃OCH₃"],correctIndex:0},
+  {text:"Phản ứng giữa carboxylic acid và alcohol tạo ester được gọi là",options:["ester hóa","thủy phân","trùng hợp","oxi hóa"],correctIndex:0},
+  {text:"Acid formic có công thức là",options:["HCOOH","CH₃COOH","C₂H₅COOH","HOOC–COOH"],correctIndex:0}
+];
+
+let QUESTION_BANK = DEFAULT_QUESTIONS.slice();
+
+let CONFIG = {
+  group:"NHÓM..........",
+  teacherPin:"12345",
+  count:10,
+  mainMessage:"CHÚC MỪNG 20 10",
+  subMessage:"CON YÊU MẸ",
+  cols:"auto",
+  revealColor:"#b3132b",
+  revealTextColor:"#ffffff",
+  slotTextColor:"#b8112b",
+  titleAccentColor:"#b2172f",
+  questionPoints:Array(20).fill(1),
+  shuffleOptions:true
+};
+
+let QUESTIONS = [];
+let CODES = [];
+let state = {
+  correct:[],
+  wrong:[],
+  current:null,
+  attempts:[],
+  penalized:[],
+  awarded:[]
+};
+
+let SCORE_HISTORY = [];
+
+try{
+  const savedScores=localStorage.getItem("PHT_GIAI_MA_SCORE_HISTORY");
+  if(savedScores){
+    const parsedScores=JSON.parse(savedScores);
+    if(Array.isArray(parsedScores)){
+      SCORE_HISTORY=parsedScores;
+    }
+  }
+}catch(error){
+  SCORE_HISTORY=[];
+}
+
+function escapeHtml(v){
+  return String(v).replace(/[&<>"']/g,ch=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[ch]));
+}
+
+function seedHash(str){
+  let h=2166136261;
+  for(const ch of String(str)){
+    h^=ch.codePointAt(0);
+    h=Math.imul(h,16777619);
+  }
+  return h>>>0;
+}
+
+function rng(seed){
+  let x=seed||123456789;
+  return function(){
+    x^=x<<13;
+    x^=x>>>17;
+    x^=x<<5;
+    return (x>>>0)/4294967296;
+  };
+}
+
+function shuffle(arr,seed){
+  const a=arr.slice();
+  const r=rng(seed);
+
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(r()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+
+  return a;
+}
+
+function makeCodes(n){
+  const pool = Array.from("ABCDEFGHJKLMNPQRSTUVWXYZ23456789");
+  return shuffle(
+    pool,
+    seedHash(CONFIG.mainMessage+"|"+CONFIG.subMessage+"|unique-codes")
+  ).slice(0,n);
+}
+
+function safePoint(value,fallback=1){
+  const n=Number(value);
+  if(!Number.isFinite(n) || n<0) return fallback;
+  return Math.round(n*100)/100;
+}
+
+function ensureQuestionPoints(n){
+  if(!Array.isArray(CONFIG.questionPoints)){
+    CONFIG.questionPoints=[];
+  }
+
+  for(let i=0;i<n;i++){
+    CONFIG.questionPoints[i]=safePoint(
+      CONFIG.questionPoints[i],
+      1
+    );
+  }
+}
+
+function questionPoint(i){
+  return safePoint(CONFIG.questionPoints[i],1);
+}
+
+function maxScore(){
+  return QUESTIONS.reduce(
+    (sum,q,i)=>sum+questionPoint(i),
+    0
+  );
+}
+
+function currentScore(){
+  return state.awarded.reduce(
+    (sum,value)=>sum+(Number(value)||0),
+    0
+  );
+}
+
+function formatScore(value){
+  const n=Math.round((Number(value)||0)*100)/100;
+  return Number.isInteger(n) ? String(n) : String(n.toFixed(2)).replace(/0+$/,"").replace(/\.$/,"");
+}
+
+function updateScoreDisplay(){
+  const scoreEl=document.getElementById("scoreText");
+  const maxEl=document.getElementById("maxScoreText");
+
+  if(scoreEl) scoreEl.textContent=formatScore(currentScore());
+  if(maxEl) maxEl.textContent=formatScore(maxScore());
+}
+
+function renderPointEditor(){
+  const host=document.getElementById("pointEditor");
+  if(!host) return;
+
+  const countSelect=document.getElementById("questionCount");
+  const requested=Math.max(
+    1,
+    Math.min(
+      Number(countSelect ? countSelect.value : CONFIG.count) || CONFIG.count || 10,
+      20
+    )
+  );
+
+  ensureQuestionPoints(requested);
+  host.innerHTML="";
+
+  for(let i=0;i<requested;i++){
+    const item=document.createElement("div");
+    item.className="point-item";
+
+    const label=document.createElement("label");
+    label.htmlFor="point-"+i;
+    label.textContent="Câu "+(i+1);
+
+    const input=document.createElement("input");
+    input.id="point-"+i;
+    input.type="number";
+    input.min="0";
+    input.max="100";
+    input.step="0.25";
+    input.value=formatScore(CONFIG.questionPoints[i]);
+    input.dataset.pointIndex=String(i);
+
+    input.addEventListener("input",updatePointTotalPreview);
+
+    item.appendChild(label);
+    item.appendChild(input);
+    host.appendChild(item);
+  }
+
+  updatePointTotalPreview();
+}
+
+function updatePointTotalPreview(){
+  const inputs=Array.from(document.querySelectorAll("#pointEditor input[data-point-index]"));
+  const total=inputs.reduce(
+    (sum,input)=>sum+safePoint(input.value,0),
+    0
+  );
+
+  const el=document.getElementById("pointTotalPreview");
+  if(el){
+    el.textContent=
+      formatScore(total)+
+      " ("+inputs.length+" câu)";
+  }
+}
+
+function collectPointSettings(count){
+  ensureQuestionPoints(count);
+
+  for(let i=0;i<count;i++){
+    const input=document.getElementById("point-"+i);
+    if(input){
+      CONFIG.questionPoints[i]=safePoint(input.value,1);
+    }
+  }
+}
+
+function applyEqualPoints(){
+  const equal=safePoint(
+    document.getElementById("equalPointInput").value,
+    1
+  );
+
+  document.querySelectorAll("#pointEditor input[data-point-index]").forEach(input=>{
+    input.value=formatScore(equal);
+  });
+
+  updatePointTotalPreview();
+}
+
+function persistScoreHistory(){
+  try{
+    localStorage.setItem(
+      "PHT_GIAI_MA_SCORE_HISTORY",
+      JSON.stringify(SCORE_HISTORY)
+    );
+  }catch(error){}
+}
+
+function renderScoreHistoryPreview(){
+  const host=document.getElementById("scoreHistoryPreview");
+  if(!host) return;
+
+  if(!SCORE_HISTORY.length){
+    host.textContent="Chưa lưu kết quả nhóm nào.";
+    return;
+  }
+
+  const rows=SCORE_HISTORY.slice().reverse().slice(0,12);
+
+  host.innerHTML=
+    '<table><thead><tr>'+
+    '<th>Nhóm</th><th>Họ tên</th><th>Lớp</th><th>Điểm</th><th>Đúng</th><th>Thời gian</th>'+
+    '</tr></thead><tbody>'+
+    rows.map(record=>
+      '<tr>'+
+      '<td>'+escapeHtml(record.group||"")+'</td>'+
+      '<td>'+escapeHtml(record.student||"")+'</td>'+
+      '<td>'+escapeHtml(record.className||"")+'</td>'+
+      '<td><b>'+escapeHtml(formatScore(record.score))+'/'+escapeHtml(formatScore(record.maxScore))+'</b></td>'+
+      '<td>'+escapeHtml(String(record.correctCount||0))+'/'+escapeHtml(String(record.totalQuestions||0))+'</td>'+
+      '<td>'+escapeHtml(record.timeLabel||"")+'</td>'+
+      '</tr>'
+    ).join("")+
+    '</tbody></table>';
+}
+
+function currentScoreRecord(){
+  const now=new Date();
+
+  return {
+    id:Date.now(),
+    group:CONFIG.group || "",
+    student:(document.getElementById("studentName").value || "").trim(),
+    className:(document.getElementById("studentClass").value || "").trim(),
+    score:currentScore(),
+    maxScore:maxScore(),
+    correctCount:state.correct.filter(Boolean).length,
+    totalQuestions:QUESTIONS.length,
+    completed:QUESTIONS.length>0 && state.correct.every(Boolean),
+    timeISO:now.toISOString(),
+    timeLabel:now.toLocaleString("vi-VN"),
+    details:QUESTIONS.map((q,i)=>({
+      question:i+1,
+      maxPoint:questionPoint(i),
+      awarded:Number(state.awarded[i])||0,
+      attempts:Number(state.attempts[i])||0,
+      retried:!!state.penalized[i],
+      correct:!!state.correct[i]
+    }))
+  };
+}
+
+function saveCurrentGroupResult(){
+  const attempted=state.attempts.some(value=>(Number(value)||0)>0);
+  const notice=document.getElementById("notice");
+
+  if(!attempted){
+    if(notice){
+      notice.className="notice warn";
+      notice.textContent="Chưa có câu nào được trả lời nên chưa thể lưu điểm nhóm.";
+    }
+    return;
+  }
+
+  const record=currentScoreRecord();
+  SCORE_HISTORY.push(record);
+  persistScoreHistory();
+  renderScoreHistoryPreview();
+
+  if(notice){
+    notice.className="notice";
+    notice.textContent=
+      "✓ Đã lưu điểm "+record.group+
+      ": "+formatScore(record.score)+"/"+formatScore(record.maxScore)+
+      ". Bạn có thể chuyển sang nhóm khác rồi tiếp tục lưu.";
+  }
+}
+
+function csvEscape(value){
+  const s=String(value ?? "");
+  if(/[",\n\r]/.test(s)){
+    return '"'+s.replace(/"/g,'""')+'"';
+  }
+  return s;
+}
+
+function exportGroupScoresCSV(){
+  const notice=document.getElementById("notice");
+
+  if(!SCORE_HISTORY.length){
+    if(notice){
+      notice.className="notice warn";
+      notice.textContent="Chưa có kết quả nhóm nào được lưu để xuất.";
+    }
+    return;
+  }
+
+  const maxDetails=Math.max(
+    ...SCORE_HISTORY.map(record=>Array.isArray(record.details)?record.details.length:0)
+  );
+
+  const header=[
+    "STT","Nhóm","Họ tên","Lớp","Tổng điểm","Điểm tối đa",
+    "Số câu đúng","Tổng số câu","Hoàn thành","Thời gian"
+  ];
+
+  for(let i=0;i<maxDetails;i++){
+    header.push("Câu "+(i+1)+" - điểm");
+    header.push("Câu "+(i+1)+" - tối đa");
+    header.push("Câu "+(i+1)+" - số lần trả lời");
+    header.push("Câu "+(i+1)+" - trả lời lại");
+  }
+
+  const rows=[header];
+
+  SCORE_HISTORY.forEach((record,index)=>{
+    const row=[
+      index+1,
+      record.group||"",
+      record.student||"",
+      record.className||"",
+      formatScore(record.score),
+      formatScore(record.maxScore),
+      record.correctCount||0,
+      record.totalQuestions||0,
+      record.completed ? "Có" : "Chưa",
+      record.timeLabel||""
+    ];
+
+    for(let i=0;i<maxDetails;i++){
+      const d=(record.details||[])[i];
+
+      if(d){
+        row.push(
+          formatScore(d.awarded),
+          formatScore(d.maxPoint),
+          d.attempts||0,
+          d.retried ? "Có" : "Không"
+        );
+      }else{
+        row.push("","","","");
+      }
+    }
+
+    rows.push(row);
+  });
+
+  const csv="\uFEFF"+rows
+    .map(row=>row.map(csvEscape).join(","))
+    .join("\r\n");
+
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="Bang_diem_nhom_Giai_ma.csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+  if(notice){
+    notice.className="notice";
+    notice.textContent="✓ Đã xuất bảng điểm nhóm dạng CSV. Có thể mở file bằng Excel.";
+  }
+}
+
+function clearGroupScores(){
+  SCORE_HISTORY=[];
+  persistScoreHistory();
+  renderScoreHistoryPreview();
+
+  const notice=document.getElementById("notice");
+  if(notice){
+    notice.className="notice";
+    notice.textContent="Đã xóa bảng điểm nhóm đã lưu trong phiên này.";
+  }
+}
+
+function prepareQuestions(){
+  const n=Math.min(CONFIG.count,QUESTION_BANK.length);
+  QUESTIONS=QUESTION_BANK.slice(0,n);
+  CODES=makeCodes(n);
+  ensureQuestionPoints(n);
+
+  state.correct=Array(n).fill(false);
+  state.wrong=Array(n).fill(false);
+  state.current=null;
+  state.attempts=Array(n).fill(0);
+  state.penalized=Array(n).fill(false);
+  state.awarded=Array(n).fill(0);
+}
+
+function createQuestionNumbers(){
+  const host=document.getElementById("numberGrid");
+  host.innerHTML="";
+
+  QUESTIONS.forEach((q,i)=>{
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="number-btn";
+    btn.dataset.index=i;
+    btn.title="Câu "+(i+1)+" • "+formatScore(questionPoint(i))+" điểm";
+    btn.innerHTML=
+      '<span class="n-main">'+(i+1)+'</span>'+
+      '<span class="n-point">'+formatScore(questionPoint(i))+'đ</span>';
+    btn.addEventListener("click",()=>openQuestion(i));
+    host.appendChild(btn);
+  });
+}
+
+function createSlots(){
+  const host=document.getElementById("slots");
+  host.innerHTML="";
+
+  Array.from(CONFIG.subMessage.toUpperCase()).forEach((ch,i)=>{
+    const d=document.createElement("div");
+
+    if(/\s/.test(ch)){
+      d.className="slot space";
+      d.dataset.space="1";
+    }else{
+      d.className="slot";
+      d.dataset.index=i;
+    }
+
+    host.appendChild(d);
+  });
+}
+
+function revealSubMessage(qi){
+  const chars=Array.from(CONFIG.subMessage.toUpperCase());
+  const positions=chars
+    .map((ch,i)=>/\s/.test(ch)?-1:i)
+    .filter(i=>i>=0);
+
+  const a=Math.floor(qi*positions.length/QUESTIONS.length);
+  const b=Math.floor((qi+1)*positions.length/QUESTIONS.length);
+
+  for(let k=a;k<Math.max(a+1,b) && k<positions.length;k++){
+    const el=document.querySelector('.slot[data-index="'+positions[k]+'"]');
+    if(el)el.textContent=chars[positions[k]];
+  }
+}
+
+/* ===== TEXT -> PIXEL MASK ===== */
+const PIXEL_FONT = {
+  "A":["01110","10001","10001","11111","10001","10001","10001"],
+  "B":["11110","10001","10001","11110","10001","10001","11110"],
+  "C":["01111","10000","10000","10000","10000","10000","01111"],
+  "D":["11110","10001","10001","10001","10001","10001","11110"],
+  "E":["11111","10000","10000","11110","10000","10000","11111"],
+  "F":["11111","10000","10000","11110","10000","10000","10000"],
+  "G":["01111","10000","10000","10111","10001","10001","01110"],
+  "H":["10001","10001","10001","11111","10001","10001","10001"],
+  "I":["11111","00100","00100","00100","00100","00100","11111"],
+  "J":["00111","00010","00010","00010","10010","10010","01100"],
+  "K":["10001","10010","10100","11000","10100","10010","10001"],
+  "L":["10000","10000","10000","10000","10000","10000","11111"],
+  "M":["10001","11011","10101","10101","10001","10001","10001"],
+  "N":["10001","11001","10101","10011","10001","10001","10001"],
+  "O":["01110","10001","10001","10001","10001","10001","01110"],
+  "P":["11110","10001","10001","11110","10000","10000","10000"],
+  "Q":["01110","10001","10001","10001","10101","10010","01101"],
+  "R":["11110","10001","10001","11110","10100","10010","10001"],
+  "S":["01111","10000","10000","01110","00001","00001","11110"],
+  "T":["11111","00100","00100","00100","00100","00100","00100"],
+  "U":["10001","10001","10001","10001","10001","10001","01110"],
+  "V":["10001","10001","10001","10001","10001","01010","00100"],
+  "W":["10001","10001","10001","10101","10101","11011","10001"],
+  "X":["10001","10001","01010","00100","01010","10001","10001"],
+  "Y":["10001","10001","01010","00100","00100","00100","00100"],
+  "Z":["11111","00001","00010","00100","01000","10000","11111"],
+  "0":["01110","10001","10011","10101","11001","10001","01110"],
+  "1":["00100","01100","00100","00100","00100","00100","01110"],
+  "2":["01110","10001","00001","00010","00100","01000","11111"],
+  "3":["11110","00001","00001","01110","00001","00001","11110"],
+  "4":["00010","00110","01010","10010","11111","00010","00010"],
+  "5":["11111","10000","10000","11110","00001","00001","11110"],
+  "6":["01110","10000","10000","11110","10001","10001","01110"],
+  "7":["11111","00001","00010","00100","01000","01000","01000"],
+  "8":["01110","10001","10001","01110","10001","10001","01110"],
+  "9":["01110","10001","10001","01111","00001","00001","01110"],
+  "/":["00001","00010","00100","01000","10000","00000","00000"],
+  "-":["00000","00000","00000","11111","00000","00000","00000"],
+  ".":["00000","00000","00000","00000","00000","00110","00110"],
+  "!":["00100","00100","00100","00100","00100","00000","00100"],
+  "?":["01110","10001","00001","00010","00100","00000","00100"],
+  ":":["00000","00110","00110","00000","00110","00110","00000"],
+  "+":["00000","00100","00100","11111","00100","00100","00000"]
+};
+
+function normalizePixelText(value){
+  return String(value || "")
+    .replace(/\r?\n/g,"|")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/Đ/g,"D")
+    .replace(/đ/g,"D")
+    .toUpperCase()
+    .replace(/[^A-Z0-9\/\-\.\!\?\:\+\|\s]+/g," ")
+    .replace(/[ \t]+/g," ")
+    .replace(/\s*\|\s*/g,"|")
+    .trim();
+}
+
+function pixelWordWidth(word){
+  if(!word) return 0;
+  return word.length * 5 + Math.max(0,word.length - 1);
+}
+
+function wrapPixelSegment(segment,maxCols){
+  const words = segment.split(/\s+/).filter(Boolean);
+  const lines = [];
+  let current = [];
+  let currentWidth = 0;
+  const usable = Math.max(11,maxCols - 2);
+  const wordGap = 3;
+
+  words.forEach(word=>{
+    const width = pixelWordWidth(word);
+
+    if(width > usable){
+      if(current.length){
+        lines.push(current);
+        current = [];
+        currentWidth = 0;
+      }
+
+      const maxChars = Math.max(1,Math.floor((usable + 1) / 6));
+
+      for(let i=0;i<word.length;i+=maxChars){
+        lines.push([word.slice(i,i+maxChars)]);
+      }
+      return;
+    }
+
+    if(!current.length){
+      current = [word];
+      currentWidth = width;
+    }else if(currentWidth + wordGap + width <= usable){
+      current.push(word);
+      currentWidth += wordGap + width;
+    }else{
+      lines.push(current);
+      current = [word];
+      currentWidth = width;
+    }
+  });
+
+  if(current.length){
+    lines.push(current);
+  }
+
+  return lines.length ? lines : [["MAT","MA"]];
+}
+
+function wrapPixelWords(text,maxCols){
+  const forced = text.split("|");
+  const all = [];
+
+  forced.forEach(segment=>{
+    const wrapped = wrapPixelSegment(segment.trim(),maxCols);
+    wrapped.forEach(line=>all.push(line));
+  });
+
+  return all.length ? all : [["MAT","MA"]];
+}
+
+function rowsForLines(lineCount){
+  const glyphHeight = 7;
+  const lineGap = 2;
+  const topBottomMargin = 1;
+
+  return topBottomMargin * 2 +
+    lineCount * glyphHeight +
+    Math.max(0,lineCount - 1) * lineGap;
+}
+
+function autoChooseCols(normalized){
+  const plainWords = normalized
+    .replace(/\|/g," ")
+    .split(/\s+/)
+    .filter(Boolean);
+
+  const widestWord = plainWords.length
+    ? Math.max(...plainWords.map(pixelWordWidth))
+    : 11;
+
+  const minCols = Math.max(31,Math.min(85,widestWord + 2));
+  const maxCols = 85;
+  const targetAspect = 3.05;
+
+  let best = null;
+
+  for(let cols=minCols;cols<=maxCols;cols++){
+    const lines = wrapPixelWords(normalized,cols);
+    const rows = rowsForLines(lines.length);
+    const aspect = cols / rows;
+
+    let score = Math.abs(aspect - targetAspect) * 4;
+    score += Math.max(0,lines.length - 4) * 1.8;
+    score += Math.max(0,rows - 35) * 0.35;
+    score += cols * 0.001;
+
+    if(!best || score < best.score){
+      best = {cols,lines,rows,score};
+    }
+  }
+
+  return best || {
+    cols:55,
+    lines:wrapPixelWords(normalized,55),
+    rows:rowsForLines(wrapPixelWords(normalized,55).length)
+  };
+}
+
+function buildMessageMask(){
+  const normalized = normalizePixelText(CONFIG.mainMessage || "THONG DIEP");
+
+  let cols, lines, rows;
+
+  if(String(CONFIG.cols) === "auto"){
+    const auto = autoChooseCols(normalized);
+    cols = auto.cols;
+    lines = auto.lines;
+    rows = auto.rows;
+  }else{
+    cols = Math.max(31,Math.min(85,Number(CONFIG.cols) || 55));
+    lines = wrapPixelWords(normalized,cols);
+    rows = rowsForLines(lines.length);
+  }
+
+  const glyphHeight = 7;
+  const charGap = 1;
+  const wordGap = 3;
+  const lineGap = 2;
+  const topBottomMargin = 1;
+
+  const mask = Array.from(
+    {length:rows},
+    ()=>Array(cols).fill(false)
+  );
+
+  let y = topBottomMargin;
+
+  lines.forEach(words=>{
+    const widths = words.map(pixelWordWidth);
+    const lineWidth =
+      widths.reduce((sum,w)=>sum+w,0) +
+      Math.max(0,words.length - 1) * wordGap;
+
+    let x = Math.max(0,Math.floor((cols - lineWidth) / 2));
+
+    words.forEach((word,wordIndex)=>{
+      Array.from(word).forEach((ch,charIndex)=>{
+        const glyph = PIXEL_FONT[ch] || PIXEL_FONT["?"];
+
+        for(let r=0;r<glyphHeight;r++){
+          for(let c=0;c<5;c++){
+            if(glyph[r][c] === "1"){
+              const rr = y + r;
+              const cc = x + c;
+
+              if(rr >= 0 && rr < rows && cc >= 0 && cc < cols){
+                mask[rr][cc] = true;
+              }
+            }
+          }
+        }
+
+        x += 5;
+
+        if(charIndex < word.length - 1){
+          x += charGap;
+        }
+      });
+
+      if(wordIndex < words.length - 1){
+        x += wordGap;
+      }
+    });
+
+    y += glyphHeight + lineGap;
+  });
+
+  return {mask,rows,cols,normalized,lines};
+}
+
+
+function createGrid(){
+  const host=document.getElementById("messageGrid");
+  const info=buildMessageMask();
+
+  host.innerHTML="";
+  host.title="Lưới tự động: "+info.cols+" cột × "+info.rows+" hàng";
+  host.style.gridTemplateColumns="repeat("+info.cols+",1fr)";
+  host.style.gridTemplateRows="repeat("+info.rows+",1fr)";
+
+  const target=[];
+
+  for(let r=0;r<info.rows;r++){
+    for(let c=0;c<info.cols;c++){
+      if(info.mask[r][c]){
+        target.push([r,c]);
+      }
+    }
+  }
+
+  const ordered=shuffle(
+    target,
+    seedHash(CONFIG.mainMessage+"|"+CODES.join("|"))
+  );
+
+  const ownerMap=new Map();
+
+  ordered.forEach((coord,index)=>{
+    ownerMap.set(
+      coord[0]+","+coord[1],
+      index % QUESTIONS.length
+    );
+  });
+
+  const codeSet=new Set(CODES);
+  const fillerPool=Array.from(
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+  ).filter(ch=>!codeSet.has(ch));
+
+  const random=rng(
+    seedHash(CONFIG.mainMessage+"|filler")
+  );
+
+  for(let r=0;r<info.rows;r++){
+    for(let c=0;c<info.cols;c++){
+      const cell=document.createElement("div");
+      cell.className="cell";
+
+      const key=r+","+c;
+
+      if(ownerMap.has(key)){
+        const owner=ownerMap.get(key);
+        cell.dataset.owner=owner;
+        cell.textContent=CODES[owner];
+      }else{
+        cell.textContent=
+          fillerPool[Math.floor(random()*fillerPool.length)] || "Q";
+      }
+
+      host.appendChild(cell);
+    }
+  }
+
+  const count=info.rows*info.cols;
+  const fontSize=Math.max(
+    8,
+    Math.min(14,500/Math.sqrt(count))
+  );
+
+  document.querySelectorAll(".cell").forEach(cell=>{
+    cell.style.fontSize=fontSize+"px";
+  });
+}
+
+function revealMainMessagePart(qi){
+  document.querySelectorAll(
+    '.cell[data-owner="'+qi+'"]'
+  ).forEach((cell,index)=>{
+    setTimeout(()=>{
+      cell.classList.add("on","flash");
+
+      setTimeout(()=>{
+        cell.classList.remove("flash");
+      },160);
+    },Math.min(index*6,300));
+  });
+}
+
+function refreshHighlights(){
+  document.querySelectorAll(".cell[data-owner]").forEach(cell=>{
+    const owner=Number(cell.dataset.owner);
+
+    cell.classList.toggle(
+      "on",
+      !!state.correct[owner]
+    );
+  });
+}
+
+/* ===== QUESTION MODAL ===== */
+function getDecoys(correctCode,count,seed){
+  const pool=Array.from(
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+  ).filter(ch=>ch!==correctCode);
+
+  const result=[];
+  const shuffled=shuffle(pool,seed);
+
+  for(const ch of shuffled){
+    if(!result.includes(ch)){
+      result.push(ch);
+    }
+
+    if(result.length===count){
+      break;
+    }
+  }
+
+  return result;
+}
+
+function openQuestion(i){
+  state.current=i;
+
+  document.querySelectorAll(".number-btn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
+  const numberBtn=document.querySelector(
+    '.number-btn[data-index="'+i+'"]'
+  );
+
+  if(numberBtn){
+    numberBtn.classList.add("active");
+  }
+
+  const q=QUESTIONS[i];
+  const done=state.correct[i];
+
+  const remainingPoint=
+    state.penalized[i]
+      ? questionPoint(i)/2
+      : questionPoint(i);
+
+  document.getElementById("qLabel").textContent=
+    "CÂU HỎI "+
+    String(i+1).padStart(2,"0")+
+    " / "+QUESTIONS.length+
+    " • "+formatScore(questionPoint(i))+" điểm"+
+    (state.penalized[i] ? " • trả lời lại: tối đa "+formatScore(remainingPoint)+" điểm" : "");
+
+  document.getElementById("qTitle").textContent=q.text;
+
+  const host=document.getElementById("options");
+  host.innerHTML="";
+
+  let items=q.options.map((text,index)=>({
+    text,
+    correct:index===q.correctIndex
+  }));
+
+  if(CONFIG.shuffleOptions){
+    items=shuffle(
+      items,
+      seedHash(q.text+"|options")
+    );
+  }
+
+  const decoys=getDecoys(
+    CODES[i],
+    Math.max(3,items.length-1),
+    seedHash(q.text+"|decoys")
+  );
+
+  let d=0;
+
+  items.forEach(item=>{
+    const label=item.correct ? CODES[i] : decoys[d++];
+
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="option-btn";
+    btn.innerHTML=
+      '<span class="code">'+escapeHtml(label)+'</span>'+
+      escapeHtml(item.text);
+
+    if(done){
+      btn.disabled=true;
+    }
+
+    btn.addEventListener("click",()=>{
+      chooseAnswer(i,item,btn);
+    });
+
+    host.appendChild(btn);
+  });
+
+  const feedback=document.getElementById("feedback");
+  feedback.textContent=done
+    ? "Câu này đã được trả lời đúng • Điểm nhận: "+
+      formatScore(state.awarded[i])+"/"+formatScore(questionPoint(i))
+    : "";
+  feedback.removeAttribute("style");
+
+  document.getElementById("manualClose")
+    .classList.toggle("hidden",!done);
+
+  document.getElementById("questionOverlay")
+    .classList.remove("hidden");
+}
+
+function closeQuestion(){
+  document.getElementById("questionOverlay")
+    .classList.add("hidden");
+
+  document.querySelectorAll(".number-btn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
+  state.current=null;
+}
+
+function chooseAnswer(qi,item,button){
+  if(state.correct[qi]){
+    return;
+  }
+
+  state.attempts[qi]=(Number(state.attempts[qi])||0)+1;
+
+  document.querySelectorAll("#options .option-btn")
+    .forEach(btn=>btn.classList.remove("wrong"));
+
+  const feedback=document.getElementById("feedback");
+
+  if(item.correct){
+    state.correct[qi]=true;
+    state.wrong[qi]=false;
+
+    button.classList.add("correct");
+
+    document.querySelectorAll("#options .option-btn")
+      .forEach(btn=>btn.disabled=true);
+
+    const numberBtn=document.querySelector(
+      '.number-btn[data-index="'+qi+'"]'
+    );
+
+    if(numberBtn){
+      numberBtn.classList.add("done");
+    }
+
+    const earned=
+      state.penalized[qi]
+        ? questionPoint(qi)/2
+        : questionPoint(qi);
+
+    state.awarded[qi]=Math.round(earned*100)/100;
+
+    feedback.textContent=
+      "✓ Chính xác! +"+
+      formatScore(state.awarded[qi])+
+      "/"+formatScore(questionPoint(qi))+
+      " điểm. Một phần mật mã đã được mở.";
+    feedback.style.color="#087547";
+
+    playSound("correct");
+    revealMainMessagePart(qi);
+    revealSubMessage(qi);
+    updateProgress();
+
+    document.getElementById("manualClose")
+      .classList.remove("hidden");
+
+    setTimeout(()=>{
+      if(
+        !document.getElementById("questionOverlay")
+          .classList.contains("hidden")
+      ){
+        closeQuestion();
+      }
+    },900);
+  }else{
+    state.wrong[qi]=true;
+    state.penalized[qi]=true;
+    state.awarded[qi]=0;
+    button.classList.add("wrong");
+
+    feedback.textContent=
+      "Chưa chính xác. Nếu trả lời lại đúng, câu này nhận tối đa "+
+      formatScore(questionPoint(qi)/2)+
+      "/"+formatScore(questionPoint(qi))+
+      " điểm.";
+    feedback.style.color="#b21d34";
+
+    playSound("wrong");
+  }
+}
+
+function playSound(type){
+  const audio=document.getElementById(
+    type==="correct" ? "soundCorrect" : "soundWrong"
+  );
+
+  try{
+    audio.pause();
+    audio.currentTime=0;
+    const promise=audio.play();
+
+    if(
+      promise &&
+      typeof promise.catch==="function"
+    ){
+      promise.catch(()=>{});
+    }
+  }catch(error){}
+}
+
+function updateProgress(){
+  const solved=state.correct.filter(Boolean).length;
+  updateScoreDisplay();
+
+  document.getElementById("progressText").textContent=
+    solved+"/"+QUESTIONS.length;
+
+  document.getElementById("progressFill").style.width=
+    (
+      QUESTIONS.length
+        ? solved/QUESTIONS.length*100
+        : 0
+    )+"%";
+
+  if(
+    solved===QUESTIONS.length &&
+    QUESTIONS.length
+  ){
+    const status=document.getElementById("status");
+
+    status.textContent=
+      "🎉 Hoàn thành! Kết quả đã được tự động lưu về Google Sheets.";
+
+    status.className="status good";
+    
+    // Tự động gọi hàm gửi dữ liệu khi hoàn thành trò chơi
+    guiKetQuaLenGoogleSheets();
+  }
+}
+
+// Hàm gửi dữ liệu lên Google Sheets qua Web App URL của bạn
+function guiKetQuaLenGoogleSheets() {
+  var studentName = (document.getElementById("studentName").value || "").trim();
+  var studentClass = (document.getElementById("studentClass").value || "").trim();
+
+  if (!studentName || !studentClass) {
+    alert("Vui lòng nhập đầy đủ Họ và tên và Lớp trước khi ghi nhận kết quả!");
+    return;
+  }
+
+  var tongSoCau = QUESTIONS.length;
+  var soCauDung = state.correct.filter(Boolean).length;
+  var soCauSai = state.wrong.filter(Boolean).length;
+  var soCauChuaLam = tongSoCau - (soCauDung + soCauSai);
+  if (soCauChuaLam < 0) soCauChuaLam = 0;
+
+  var diem = currentScore();
+  var thoiGian = new Date().toLocaleString("vi-VN");
+
+  var payload = {
+    "hoVaTen": studentName,
+    "lop": studentClass,
+    "diem": diem,
+    "soCauDung": soCauDung,
+    "soCauSai": soCauSai,
+    "soCauChuaLam": soCauChuaLam,
+    "tongSoCau": tongSoCau,
+    "thoiGian": thoiGian
+  };
+
+  var webAppUrl = "https://script.google.com/macros/s/AKfycbyLgKhOMoxQisUIdGQxxWac2CpN6hw07Uo3CuZ6DbgQEcTAfP7mVZnN1P1BM0NRMKI/exec";
+
+  fetch(webAppUrl, {
+    method: "POST",
+    mode: "no-cors",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    alert("Đã lưu kết quả thành công vào Google Sheets!");
+  })
+  .catch(error => {
+    console.error("Lỗi khi gửi kết quả:", error);
+    alert("Có lỗi xảy ra khi kết nối tới Google Sheets.");
+  });
+}
+
+function resetWrongAnswers(){
+  state.wrong.fill(false);
+
+  const status=document.getElementById("status");
+  status.textContent=
+    "Các câu sai đã được mở lại. Hãy tiếp tục.";
+  status.className="status";
+}
+
+function resetAll(){
+  state.correct.fill(false);
+  state.wrong.fill(false);
+  state.attempts.fill(0);
+  state.penalized.fill(false);
+  state.awarded.fill(0);
+
+  document.querySelectorAll(".number-btn").forEach(btn=>{
+    btn.classList.remove("done","active");
+  });
+
+  document.querySelectorAll(".cell").forEach(cell=>{
+    cell.classList.remove("on","flash");
+  });
+
+  document.querySelectorAll(".slot").forEach(slot=>{
+    if(!slot.dataset.space){
+      slot.textContent="";
+    }
+  });
+
+  const status=document.getElementById("status");
+  status.textContent=
+    "Trả lời đúng từng câu để tô thông điệp lớn và mở dần thông điệp phía dưới.";
+  status.className="status";
+
+  updateProgress();
+}
+
+/* ===== FILE IMPORT ===== */
+const SUBSCRIPT_MAP = {
+  "0":"₀","1":"₁","2":"₂","3":"₃","4":"₄",
+  "5":"₅","6":"₆","7":"₇","8":"₈","9":"₉",
+  "+":"₊","-":"₋","=":"₌","(":"₍",")":"₎",
+  "a":"ₐ","e":"ₑ","h":"ₕ","i":"ᵢ","j":"ⱼ","k":"ₖ",
+  "l":"ₗ","m":"ₘ","n":"ₙ","o":"ₒ","p":"ₚ","r":"ᵣ",
+  "s":"ₛ","t":"ₜ","x":"ₓ"
+};
+
+const SUPERSCRIPT_MAP = {
+  "0":"⁰","1":"¹","2":"²","3":"³","4":"⁴",
+  "5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹",
+  "+":"⁺","-":"⁻","=":"⁼","(":"⁽",")":"⁾",
+  "i":"ⁱ","n":"ⁿ"
+};
+
+function convertScriptText(value,type){
+  const map=type==="subscript" ? SUBSCRIPT_MAP : SUPERSCRIPT_MAP;
+
+  return Array.from(String(value||""))
+    .map(ch=>{
+      const lower=ch.toLowerCase();
+      return map[ch] || map[lower] || ch;
+    })
+    .join("");
+}
+
+function localNameOf(node){
+  return node && (node.localName || String(node.nodeName||"").split(":").pop());
+}
+
+function hasAncestorLocalName(node,name){
+  let p=node ? node.parentNode : null;
+
+  while(p){
+    if(localNameOf(p)===name){
+      return true;
+    }
+    p=p.parentNode;
+  }
+
+  return false;
+}
+
+function getWordAttr(node,name){
+  if(!node) return null;
+
+  return (
+    node.getAttribute("w:"+name) ||
+    node.getAttribute(name) ||
+    node.getAttributeNS(
+      "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+      name
+    )
+  );
+}
+
+function detectRunScript(run){
+  const vertNodes=Array.from(
+    run.getElementsByTagNameNS("*","vertAlign")
+  );
+
+  if(vertNodes.length){
+    const val=String(getWordAttr(vertNodes[0],"val")||"").toLowerCase();
+
+    if(val==="subscript") return "subscript";
+    if(val==="superscript") return "superscript";
+  }
+
+  if(hasAncestorLocalName(run,"sub")) return "subscript";
+  if(hasAncestorLocalName(run,"sup")) return "superscript";
+
+  return "";
+}
+
+function legacyEquationFallback(run){
+  const objects=Array.from(
+    run.getElementsByTagNameNS("*","object")
+  );
+
+  if(!objects.length){
+    return "";
+  }
+
+  const shape=run.getElementsByTagNameNS("*","shape")[0];
+
+  if(shape){
+    const style=String(shape.getAttribute("style")||"");
+    const widthMatch=style.match(/width\s*:\s*([\d.]+)pt/i);
+    const heightMatch=style.match(/height\s*:\s*([\d.]+)pt/i);
+
+    if(widthMatch && heightMatch){
+      const w=Number(widthMatch[1]);
+      const h=Number(heightMatch[1]);
+
+      if(Number.isFinite(w) && Number.isFinite(h) && h>0 && w/h>=2.2){
+        return " → ";
+      }
+    }
+  }
+
+  const ole=run.getElementsByTagNameNS("*","OLEObject")[0];
+  if(ole){
+    const progId=String(ole.getAttribute("ProgID")||"");
+    if(/Equation|MathType|DSMT/i.test(progId)){
+      return " ⟦CT⟧ ";
+    }
+  }
+
+  return "";
+}
+
+function readFormattedRun(run){
+  const textNodes=Array.from(
+    run.getElementsByTagNameNS("*","t")
+  );
+
+  let raw=textNodes
+    .map(node=>node.textContent||"")
+    .join("");
+
+  if(run.getElementsByTagNameNS("*","tab").length){
+    raw+=" ";
+  }
+
+  if(run.getElementsByTagNameNS("*","br").length){
+    raw+="\n";
+  }
+
+  if(!raw){
+    return legacyEquationFallback(run);
+  }
+
+  const scriptType=detectRunScript(run);
+
+  if(scriptType){
+    return convertScriptText(raw,scriptType);
+  }
+
+  return raw;
+}
+
+function parseQuestionLines(lines){
+  const starts=[];
+
+  lines.forEach((obj,index)=>{
+    if(
+      /^Câu\s*\d+\s*[:.)-]/i
+        .test(obj.text.trim())
+    ){
+      starts.push(index);
+    }
+  });
+
+  const blocks=[];
+
+  if(starts.length){
+    starts.forEach((start,k)=>{
+      const end=
+        k+1<starts.length
+          ? starts[k+1]
+          : lines.length;
+
+      blocks.push(
+        lines.slice(start,end)
+      );
+    });
+  }else{
+    let current=[];
+
+    lines.forEach(obj=>{
+      if(!obj.text.trim()){
+        if(current.length){
+          blocks.push(current);
+          current=[];
+        }
+      }else{
+        current.push(obj);
+      }
+    });
+
+    if(current.length){
+      blocks.push(current);
+    }
+  }
+
+  const result=[];
+
+  blocks.forEach(block=>{
+    if(!block.length){
+      return;
+    }
+
+    let text=block[0].text
+      .trim()
+      .replace(
+        /^Câu\s*\d+\s*[:.)-]\s*/i,
+        ""
+      );
+
+    const options=[];
+    let correctLetter=null;
+
+    block.slice(1).forEach(obj=>{
+      const line=obj.text.trim();
+
+      if(!line){
+        return;
+      }
+
+      const ans=line.match(
+        /^(?:Đáp\s*án|Dap\s*an|Answer)\s*[:\-]\s*([A-H])/i
+      );
+
+      if(ans){
+        correctLetter=
+          ans[1].toUpperCase();
+        return;
+      }
+
+      const op=line.match(
+        /^(\*)?\s*([A-H])\s*[.)\-:]\s*(.+)$/i
+      );
+
+      if(op){
+        const letter=
+          op[2].toUpperCase();
+
+        options.push({
+          originalLetter:letter,
+          text:op[3].trim(),
+          underlined:!!obj.underlined,
+          star:!!op[1]
+        });
+
+        if(
+          obj.underlined ||
+          op[1]
+        ){
+          correctLetter=letter;
+        }
+      }else if(options.length){
+        options[
+          options.length-1
+        ].text+=" "+line;
+
+        if(obj.underlined){
+          options[
+            options.length-1
+          ].underlined=true;
+        }
+      }else{
+        text+=" "+line;
+      }
+    });
+
+    if(options.length>=2){
+      let correctIndex=
+        options.findIndex(
+          option=>
+            option.originalLetter===
+            correctLetter
+        );
+
+      if(correctIndex<0){
+        correctIndex=
+          options.findIndex(
+            option=>
+              option.underlined ||
+              option.star
+          );
+      }
+
+      if(correctIndex<0){
+        correctIndex=0;
+      }
+
+      result.push({
+        text:text.trim(),
+        options:
+          options.map(
+            option=>option.text
+          ),
+        correctIndex
+      });
+    }
+  });
+
+  return result;
+}
+
+async function parseDocx(file){
+  if(!window.JSZip){
+    throw new Error(
+      "Không tải được thư viện đọc Word."
+    );
+  }
+
+  const zip=
+    await JSZip.loadAsync(
+      await file.arrayBuffer()
+    );
+
+  const entry=
+    zip.file("word/document.xml");
+
+  if(!entry){
+    throw new Error(
+      "File DOCX không hợp lệ."
+    );
+  }
+
+  const xmlText=
+    await entry.async("text");
+
+  const xml=
+    new DOMParser()
+      .parseFromString(
+        xmlText,
+        "application/xml"
+      );
+
+  const paragraphs=
+    Array.from(
+      xml.getElementsByTagNameNS(
+        "*",
+        "p"
+      )
+    );
+
+  const lines=
+    paragraphs.map(p=>{
+      const runs=
+        Array.from(
+          p.getElementsByTagNameNS(
+            "*",
+            "r"
+          )
+        );
+
+      let text="";
+      let underlined=false;
+      let hasLegacyEquation=false;
+
+      runs.forEach(run=>{
+        const us=
+          Array.from(
+            run.getElementsByTagNameNS(
+              "*",
+              "u"
+            )
+          );
+
+        if(
+          us.some(node=>{
+            const val=
+              getWordAttr(node,"val") ||
+              "single";
+
+            return val!=="none";
+          })
+        ){
+          underlined=true;
+        }
+
+        const piece=readFormattedRun(run);
+
+        if(piece===" ⟦CT⟧ "){
+          hasLegacyEquation=true;
+        }
+
+        text+=piece;
+      });
+
+      text=text
+        .replace(/[ \t]+/g," ")
+        .replace(/\s*→\s*/g," → ")
+        .trimEnd();
+
+      return {
+        text,
+        underlined,
+        hasLegacyEquation
+      };
+    });
+
+  const parsedQuestions=parseQuestionLines(lines);
+
+  parsedQuestions._legacyEquationCount=
+    lines.filter(line=>line.hasLegacyEquation).length;
+
+  return parsedQuestions;
+}
+
+function parseTxt(text){
+  return parseQuestionLines(
+    String(text)
+      .replace(/\r/g,"")
+      .split("\n")
+      .map(line=>({
+        text:line,
+        underlined:false
+      }))
+  );
+}
+
+function parseJson(text){
+  const data=JSON.parse(text);
+  const arr=
+    Array.isArray(data)
+      ? data
+      : (data.questions || []);
+
+  return arr.map(item=>{
+    const options=
+      Array.isArray(item.options)
+        ? item.options.map(String)
+        : [];
+
+    let correctIndex=
+      item.correctIndex;
+
+    if(correctIndex===undefined){
+      const c=
+        String(
+          item.correct || "A"
+        ).toUpperCase();
+
+      correctIndex=
+        /^[A-H]$/.test(c)
+          ? c.charCodeAt(0)-65
+          : 0;
+    }
+
+    correctIndex=
+      Number(correctIndex);
+
+    if(
+      !Number.isInteger(correctIndex) ||
+      correctIndex<0 ||
+      correctIndex>=options.length
+    ){
+      correctIndex=0;
+    }
+
+    return {
+      text:
+        String(
+          item.text ||
+          item.question ||
+          ""
+        ),
+      options,
+      correctIndex
+    };
+  }).filter(
+    item=>
+      item.text &&
+      item.options.length>=2
+  );
+}
+
+async function readQuestionFile(){
+  const input=
+    document.getElementById(
+      "questionFile"
+    );
+
+  const file=
+    input.files &&
+    input.files[0];
+
+  const preview=
+    document.getElementById(
+      "questionPreview"
+    );
+
+  const notice=
+    document.getElementById(
+      "notice"
+    );
+
+  if(!file){
+    notice.className=
+      "notice warn";
+    notice.textContent=
+      "Hãy chọn file câu hỏi.";
+    return;
+  }
+
+  preview.textContent=
+    "Đang đọc file...";
+
+  try{
+    const ext=
+      file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+    let parsed=[];
+
+    if(ext==="docx"){
+      parsed=
+        await parseDocx(file);
+    }else if(ext==="txt"){
+      parsed=
+        parseTxt(
+          await file.text()
+        );
+    }else if(ext==="json"){
+      parsed=
+        parseJson(
+          await file.text()
+        );
+    }else{
+      throw new Error(
+        "Chỉ hỗ trợ DOCX, TXT hoặc JSON."
+      );
+    }
+
+    if(!parsed.length){
+      throw new Error(
+        "Không nhận diện được câu hỏi hợp lệ."
+      );
+    }
+
+    QUESTION_BANK=parsed;
+
+    const legacyEquationCount=
+      Number(parsed._legacyEquationCount)||0;
+
+    const countSelect=document.getElementById("questionCount");
+    if(countSelect){
+      const available=Math.min(parsed.length,20);
+      if(Array.from(countSelect.options).some(option=>Number(option.value||option.textContent)===available)){
+        countSelect.value=String(available);
+      }
+    }
+
+    renderPointEditor();
+
+    preview.innerHTML=
+      parsed.slice(0,6)
+        .map((q,i)=>
+          "<div><b>"+
+          (i+1)+
+          ".</b> "+
+          escapeHtml(q.text)+
+          " <span style='color:#777'>("+
+          q.options.length+
+          " đáp án)</span></div>"
+        )
+        .join("")+
+      (
+        parsed.length>6
+          ? "<div style='margin-top:5px;color:#777'>... và "+
+            (parsed.length-6)+
+            " câu khác.</div>"
+          : ""
+      );
+
+    notice.className=legacyEquationCount ? "notice warn" : "notice";
+    notice.textContent=
+      "✓ Đã nạp "+
+      parsed.length+
+      " câu hỏi. Chỉ số dưới/chỉ số trên đã được giữ định dạng."+
+      (
+        legacyEquationCount
+          ? " Có "+legacyEquationCount+
+            " dòng chứa Equation Editor cũ mà trình duyệt không giải mã đầy đủ; mũi tên phản ứng dạng dài sẽ được đổi sang →, công thức OLE phức tạp sẽ hiện ⟦CT⟧."
+          : ""
+      )+
+      " Bấm “Áp dụng và tạo phiếu”.";
+  }catch(error){
+    preview.textContent=
+      "Không đọc được câu hỏi.";
+
+    notice.className=
+      "notice warn";
+
+    notice.textContent=
+      "⚠ "+error.message;
+  }
+}
+
+/* ===== ADMIN ===== */
+function openAdmin(){
+  const overlay=document.getElementById("pinOverlay");
+  const input=document.getElementById("pinLoginInput");
+  const error=document.getElementById("pinError");
+
+  error.textContent="";
+  input.value="";
+  overlay.classList.remove("hidden");
+
+  setTimeout(function(){
+    input.focus();
+  },50);
+}
+
+function closePinOverlay(){
+  document.getElementById("pinOverlay").classList.add("hidden");
+  document.getElementById("pinLoginInput").value="";
+  document.getElementById("pinError").textContent="";
+}
+
+function verifyTeacherPin(){
+  const input=document.getElementById("pinLoginInput");
+  const error=document.getElementById("pinError");
+  const entered=input.value.trim();
+
+  if(entered!==String(CONFIG.teacherPin)){
+    error.textContent="Mã PIN chưa đúng. Vui lòng nhập lại.";
+    input.select();
+    return;
+  }
+
+  closePinOverlay();
+
+  const pinField=document.getElementById("teacherPinInput");
+  if(pinField){
+    pinField.value=CONFIG.teacherPin;
+  }
+
+  renderPointEditor();
+  renderScoreHistoryPreview();
+  document.getElementById("adminOverlay").classList.remove("hidden");
+}
+
+function closeAdmin(){
+  document.getElementById("adminOverlay").classList.add("hidden");
+}
+
+function applyAdmin(){
+  CONFIG.group=
+    document
+      .getElementById(
+        "groupInput"
+      )
+      .value
+      .trim() ||
+    "NHÓM..........";
+
+  CONFIG.teacherPin=
+    document
+      .getElementById("teacherPinInput")
+      .value
+      .trim() || "12345";
+
+  const requestedQuestionCount=
+    Math.max(
+      1,
+      Math.min(
+        Number(
+          document
+            .getElementById(
+              "questionCount"
+            )
+            .value
+        ) || 10,
+        20
+      )
+    );
+
+  if(QUESTION_BANK.length < requestedQuestionCount){
+    const notice=document.getElementById("notice");
+    notice.className="notice warn";
+    notice.textContent=
+      "Bạn đang chọn "+requestedQuestionCount+
+      " câu nhưng ngân hàng hiện chỉ có "+QUESTION_BANK.length+
+      " câu. Hãy nạp file đủ câu hỏi hoặc giảm số câu hiển thị.";
+    return;
+  }
+
+  CONFIG.count=requestedQuestionCount;
+  collectPointSettings(CONFIG.count);
+
+  CONFIG.mainMessage=
+    document
+      .getElementById(
+        "mainMessageInput"
+      )
+      .value
+      .trim()
+      .toUpperCase() ||
+    "CHÚC MỪNG 20 10";
+
+  CONFIG.subMessage=
+    document
+      .getElementById(
+        "subMessageInput"
+      )
+      .value
+      .trim()
+      .toUpperCase() ||
+    "CON YÊU MẸ";
+
+  const gridColsValue=
+    document
+      .getElementById(
+        "gridCols"
+      )
+      .value;
+
+  CONFIG.cols=
+    gridColsValue==="auto"
+      ? "auto"
+      : (Number(gridColsValue)||55);
+
+  CONFIG.revealColor=
+    document
+      .getElementById(
+        "revealColor"
+      )
+      .value || "#b3132b";
+
+  CONFIG.revealTextColor=
+    document
+      .getElementById(
+        "revealTextColor"
+      )
+      .value || "#ffffff";
+
+  CONFIG.slotTextColor=
+    document
+      .getElementById(
+        "slotTextColor"
+      )
+      .value || "#b8112b";
+
+  CONFIG.titleAccentColor=
+    document
+      .getElementById(
+        "titleAccentColor"
+      )
+      .value || "#b2172f";
+
+  document.documentElement.style.setProperty("--reveal",CONFIG.revealColor);
+  document.documentElement.style.setProperty("--reveal-text",CONFIG.revealTextColor);
+  document.documentElement.style.setProperty("--slot-color",CONFIG.slotTextColor);
+  document.documentElement.style.setProperty("--title-accent",CONFIG.titleAccentColor);
+
+  CONFIG.shuffleOptions=
+    document
+      .getElementById(
+        "shuffleOptions"
+      )
+      .value === "yes";
+
+  document
+    .getElementById(
+      "groupRibbon"
+    )
+    .textContent=
+      CONFIG.group;
+
+  buildApp();
+  closeAdmin();
+}
+
+function buildApp(){
+  prepareQuestions();
+  createQuestionNumbers();
+  createSlots();
+  createGrid();
+  resetAll();
+  updateScoreDisplay();
+
+  document
+    .getElementById(
+      "groupRibbon"
+    )
+    .textContent=
+      CONFIG.group;
+}
+
+
+/* ===== EXPORT WORD FOR STUDENTS ===== */
+function xmlEscape(value){
+  return String(value).replace(/[&<>\"]/g,ch=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"
+  }[ch]));
+}
+
+function preparedQuestionForExport(q,qi){
+  let items=q.options.map((text,index)=>({
+    text,
+    correct:index===q.correctIndex
+  }));
+
+  if(CONFIG.shuffleOptions){
+    items=shuffle(items,seedHash(q.text+"|options"));
+  }
+
+  const decoys=getDecoys(
+    CODES[qi],
+    Math.max(3,items.length-1),
+    seedHash(q.text+"|decoys")
+  );
+
+  let d=0;
+
+  return items.map(item=>({
+    text:item.text,
+    label:item.correct ? CODES[qi] : decoys[d++]
+  }));
+}
+
+function buildPrintableCanvas(){
+  const grid=document.getElementById("messageGrid");
+  const cells=Array.from(grid.querySelectorAll(".cell"));
+  const match=(grid.style.gridTemplateColumns||"").match(/repeat\((\d+)/);
+  const cols=match ? Number(match[1]) : 55;
+  const rows=Math.max(1,Math.ceil(cells.length/cols));
+
+  const W=1700;
+  const H=1120;
+  const canvas=document.createElement("canvas");
+  canvas.width=W;
+  canvas.height=H;
+  const ctx=canvas.getContext("2d");
+
+  ctx.fillStyle="#ffffff";
+  ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle="#111111";
+  ctx.lineWidth=4;
+  ctx.strokeRect(18,18,W-36,H-36);
+
+  ctx.fillStyle="#111111";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.font='bold 44px "Times New Roman"';
+  ctx.fillText("GIẢI MÃ MẬT MÃ",W/2,58);
+
+  ctx.textAlign="left";
+  ctx.font='28px "Times New Roman"';
+  ctx.fillText("Họ và tên: _________________________________",55,112);
+  ctx.fillText("Lớp: ______________",1040,112);
+  ctx.fillText("Điểm: ______ / "+formatScore(maxScore()),1360,112);
+
+  const n=QUESTIONS.length;
+  const box=54;
+  const gap=12;
+  const total=n*box+(n-1)*gap;
+  let nx=Math.max(55,(W-total)/2);
+  const ny=148;
+  ctx.font='bold 26px "Times New Roman"';
+  ctx.textAlign="center";
+
+  QUESTIONS.forEach((q,i)=>{
+    ctx.strokeStyle="#333333";
+    ctx.lineWidth=2;
+    ctx.strokeRect(nx+i*(box+gap),ny,box,box);
+    ctx.fillStyle="#111111";
+    ctx.fillText(String(i+1),nx+i*(box+gap)+box/2,ny+box/2+1);
+  });
+
+  ctx.textAlign="left";
+  ctx.font='bold 27px "Times New Roman"';
+  ctx.fillText("CÁC CHỮ CÁI",55,242);
+
+  const gx=55;
+  const gy=265;
+  const gw=W-110;
+  const gh=690;
+  const cellW=gw/cols;
+  const cellH=gh/rows;
+  const fontSize=Math.max(10,Math.min(25,Math.min(cellW,cellH)*0.54));
+
+  ctx.font='bold '+fontSize+'px "Courier New"';
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const idx=r*cols+c;
+      if(idx>=cells.length)continue;
+      const x=gx+c*cellW;
+      const y=gy+r*cellH;
+      ctx.fillStyle="#ffffff";
+      ctx.fillRect(x,y,cellW,cellH);
+      ctx.strokeStyle="#555555";
+      ctx.lineWidth=1;
+      ctx.strokeRect(x,y,cellW,cellH);
+      ctx.fillStyle="#111111";
+      ctx.fillText(cells[idx].textContent||"",x+cellW/2,y+cellH/2+1);
+    }
+  }
+
+  ctx.textAlign="center";
+  ctx.font='bold 27px "Times New Roman"';
+  ctx.fillStyle="#111111";
+  ctx.fillText("THÔNG ĐIỆP BÍ MẬT: ______________________________________________",W/2,1020);
+
+  ctx.font='20px "Times New Roman"';
+  ctx.fillText("Mỗi câu có một mã riêng. Tô tất cả ô mang mã của đáp án em chọn. Không có ô nào được tô sẵn.",W/2,1060);
+
+  return canvas;
+}
+
+function base64FromDataUrl(dataUrl){
+  return dataUrl.split(",")[1];
+}
+
+async function exportWordForStudents(){
+  if(!window.JSZip){
+    alert("Không tải được thư viện tạo Word. Hãy kiểm tra kết nối Internet.");
+    return;
+  }
+
+  applyAdmin();
+
+  const canvas=buildPrintableCanvas();
+  const imageBase64=base64FromDataUrl(canvas.toDataURL("image/png"));
+  const zip=new JSZip();
+
+  zip.file("[Content_Types].xml",`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Default Extension="png" ContentType="image/png"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+</Types>`);
+
+  zip.folder("_rels").file(".rels",`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`);
+
+  zip.folder("word").folder("_rels").file("document.xml.rels",`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rIdImage1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/pht.png"/>
+</Relationships>`);
+
+  zip.folder("word").folder("media").file("pht.png",imageBase64,{base64:true});
+
+  const questionXml=QUESTIONS.map((q,qi)=>{
+    const items=preparedQuestionForExport(q,qi);
+    const opts=items.map(item=>
+      `<w:p><w:pPr><w:spacing w:after="50"/><w:ind w:left="360"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:t xml:space="preserve">${xmlEscape(item.label)}. ${xmlEscape(item.text)}</w:t></w:r></w:p>`
+    ).join("");
+
+    return `<w:p><w:pPr><w:spacing w:before="90" w:after="50"/></w:pPr><w:r><w:rPr><w:b/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="25"/></w:rPr><w:t>${xmlEscape("Câu "+(qi+1)+" ("+formatScore(questionPoint(qi))+" điểm). "+q.text)}</w:t></w:r></w:p>${opts}`;
+  }).join("");
+
+  const documentXml=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+ xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+ xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+ xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+ xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+<w:body>
+  <w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:drawing>
+    <wp:inline distT="0" distB="0" distL="0" distR="0">
+      <wp:extent cx="9875520" cy="6400800"/>
+      <wp:docPr id="1" name="Phiếu học tập"/>
+      <a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+        <pic:pic>
+          <pic:nvPicPr><pic:cNvPr id="0" name="pht.png"/><pic:cNvPicPr/></pic:nvPicPr>
+          <pic:blipFill><a:blip r:embed="rIdImage1"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>
+          <pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="9875520" cy="6400800"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>
+        </pic:pic>
+      </a:graphicData></a:graphic>
+    </wp:inline>
+  </w:drawing></w:r></w:p>
+  <w:p><w:r><w:br w:type="page"/></w:r></w:p>
+  <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="120"/></w:pPr><w:r><w:rPr><w:b/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="32"/></w:rPr><w:t>CÂU HỎI</w:t></w:r></w:p>
+  ${questionXml}
+  <w:sectPr>
+    <w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>
+    <w:pgMar w:top="360" w:right="360" w:bottom="360" w:left="360" w:header="0" w:footer="0" w:gutter="0"/>
+  </w:sectPr>
+</w:body>
+</w:document>`;
+
+  zip.folder("word").file("document.xml",documentXml);
+
+  const blob=await zip.generateAsync({type:"blob",compression:"DEFLATE"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="PHT_Giai_ma_Hoc_sinh.docx";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+/* ===== EVENTS ===== */
+document
+  .getElementById(
+    "openAdmin"
+  )
+  .addEventListener(
+    "click",
+    openAdmin
+  );
+
+document
+  .getElementById("pinConfirm")
+  .addEventListener("click",verifyTeacherPin);
+
+document
+  .getElementById("pinCancel")
+  .addEventListener("click",closePinOverlay);
+
+document
+  .getElementById("pinLoginInput")
+  .addEventListener("keydown",function(event){
+    if(event.key==="Enter"){
+      event.preventDefault();
+      verifyTeacherPin();
+    }else if(event.key==="Escape"){
+      event.preventDefault();
+      closePinOverlay();
+    }
+  });
+
+document
+  .getElementById("pinOverlay")
+  .addEventListener("click",function(event){
+    if(event.target===this){
+      closePinOverlay();
+    }
+  });
+
+document
+  .getElementById(
+    "closeAdmin"
+  )
+  .addEventListener(
+    "click",
+    closeAdmin
+  );
+
+document
+  .getElementById(
+    "cancelAdmin"
+  )
+  .addEventListener(
+    "click",
+    closeAdmin
+  );
+
+document
+  .getElementById(
+    "applyAdmin"
+  )
+  .addEventListener(
+    "click",
+    applyAdmin
+  );
+
+document
+  .getElementById("exportWord")
+  .addEventListener("click",exportWordForStudents);
+
+document
+  .getElementById("revealColor")
+  .addEventListener("change",function(){
+    document.getElementById("customRevealColor").value=this.value;
+  });
+
+document
+  .getElementById("revealTextColor")
+  .addEventListener("change",function(){
+    document.getElementById("customRevealTextColor").value=this.value;
+  });
+
+document
+  .getElementById("applyCustomColors")
+  .addEventListener("click",function(){
+    const bg=document.getElementById("customRevealColor").value;
+    const fg=document.getElementById("customRevealTextColor").value;
+
+    CONFIG.revealColor=bg;
+    CONFIG.revealTextColor=fg;
+
+    document.documentElement.style.setProperty("--reveal",bg);
+    document.documentElement.style.setProperty("--reveal-text",fg);
+
+    const bgSelect=document.getElementById("revealColor");
+    const fgSelect=document.getElementById("revealTextColor");
+
+    if(Array.from(bgSelect.options).some(o=>o.value===bg)){
+      bgSelect.value=bg;
+    }
+    if(Array.from(fgSelect.options).some(o=>o.value===fg)){
+      fgSelect.value=fg;
+    }
+
+    document.getElementById("notice").className="notice";
+    document.getElementById("notice").textContent=
+      "✓ Đã áp dụng màu tùy chọn. Khi bấm “Áp dụng và tạo phiếu”, màu này sẽ được giữ cho trò chơi.";
+  });
+
+document
+  .getElementById(
+    "readQuestions"
+  )
+  .addEventListener(
+    "click",
+    readQuestionFile
+  );
+
+document
+  .getElementById("questionCount")
+  .addEventListener("change",renderPointEditor);
+
+document
+  .getElementById("applyEqualPoints")
+  .addEventListener("click",applyEqualPoints);
+
+document
+  .getElementById("saveGroupScore")
+  .addEventListener("click",saveCurrentGroupResult);
+
+document
+  .getElementById("exportGroupScores")
+  .addEventListener("click",exportGroupScoresCSV);
+
+document
+  .getElementById("clearGroupScores")
+  .addEventListener("click",clearGroupScores);
+
+document
+  .getElementById(
+    "closeQuestion"
+  )
+  .addEventListener(
+    "click",
+    closeQuestion
+  );
+
+document
+  .getElementById(
+    "manualClose"
+  )
+  .addEventListener(
+    "click",
+    closeQuestion
+  );
+
+document
+  .getElementById(
+    "questionOverlay"
+  )
+  .addEventListener(
+    "click",
+    function(e){
+      if(e.target===this){
+        closeQuestion();
+      }
+    }
+  );
+
+document
+  .getElementById(
+    "adminOverlay"
+  )
+  .addEventListener(
+    "click",
+    function(e){
+      if(e.target===this){
+        closeAdmin();
+      }
+    }
+  );
+
+function formulaParserSelfTest(){
+  const tests=[
+    ["H2SO4","H₂SO₄"],
+    ["SO4 2-","SO₄ ²⁻"],
+    ["x2","x²"]
+  ];
+  window.__formulaSupportReady=true;
+}
+
+/* INITIAL */
+formulaParserSelfTest();
+renderPointEditor();
+renderScoreHistoryPreview();
+document.documentElement.style.setProperty("--reveal",CONFIG.revealColor);
+document.documentElement.style.setProperty("--reveal-text",CONFIG.revealTextColor);
+document.documentElement.style.setProperty("--slot-color",CONFIG.slotTextColor);
+document.documentElement.style.setProperty("--title-accent",CONFIG.titleAccentColor);
+buildApp();
+</script>
+</body>
+</html>
